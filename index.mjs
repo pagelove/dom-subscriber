@@ -39,24 +39,28 @@ class DOMSubscriber {
                 const registry  = subscriptions;
                 const selectors = Object.keys( registry );
                 for ( const mutation of mutationList ) {
-                    if ( mutation.addedNodes.length > 0 ) {
-                        mutation.addedNodes.forEach( (node) => {
-                            for ( const selector of selectors ) {
-                                // we want to test the node and its children
-                                let runWithNode;
-                                if ( node.matches && node.matches( selector )) runWithNode = node;
-                                else {
-                                    if ( node.querySelector && node.querySelector( selector ))
-                                        runWithNode = node.querySelector( selector );
-                                } 
-                                        
-                                if ( runWithNode ) {
-                                    for ( const cb of registry[ selector ] ) {
-                                        cb( runWithNode, registry[ selector ] );
-                                    }      
-                                }
+                    const withNodes = (node) => {
+                        for ( const selector of selectors ) {
+                            // we want to test the node and its children
+                            let runWithNode;
+                            if ( node.matches && node.matches( selector )) runWithNode = node;
+                            else {
+                                if ( node.querySelector && node.querySelector( selector ))
+                                    runWithNode = node.querySelector( selector );
+                            } 
+                                    
+                            if ( runWithNode ) {
+                                for ( const cb of registry[ selector ] ) {
+                                    cb( runWithNode, registry[ selector ] );
+                                }      
                             }
-                        });
+                        }
+                    };
+                    if ( mutation.addedNodes.length > 0 ) {
+                        mutation.addedNodes.forEach( withNodes );
+                    }
+                    if ( mutation.removedNodes.length > 0 ) {
+                        mutation.removedNodes.forEach( withNodes );
                     }
                 }
             });
