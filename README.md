@@ -4,17 +4,17 @@ Subscribe to DOM mutations via CSS selectors, to create reactive user experience
 
 ## Usage
 
-    ```html
-    <p>There are <span id="count"></span> paragraphs.</p>
-    ```
+```html
+<p>There are <span id="count"></span> paragraphs.</p>
+```
 
-    ```javascript
-    import { DOMSubscriber } as "https://pagelove.org/DOMSubscriber/index.mjs"
+```javascript
+import { DOMSubscriber } as "https://pagelove.org/DOMSubscriber/index.mjs"
 
-    DOMSubscriber.subscribe( document, "p", ( element, subscription ) => {
-        const pCount = document.querySelector("#count");
-        pCount.innerHTML = subscription.matching.length;
-    });
-    ```
+DOMSubscriber.subscribe( document, "p", ( element, subscription ) => {
+    const pCount = document.querySelector("#count");
+    pCount.innerHTML = subscription.matching.length;
+});
+```
 
 
