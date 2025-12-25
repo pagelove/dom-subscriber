@@ -24,7 +24,7 @@ class DOMSubscriber {
         }
 
         if ( root.observer ) {
-            subscriptions = root.observer.subscriptions
+            subscriptions = root.observer.subscriptions || {}
         }
 
         if ( Reflect.has( subscriptions, selector )) {
@@ -47,12 +47,12 @@ class DOMSubscriber {
                             else {
                                 if ( node.querySelector && node.querySelector( selector ))
                                     runWithNode = node.querySelector( selector );
-                            } 
-                                    
+                            }
+
                             if ( runWithNode ) {
                                 for ( const cb of registry[ selector ] ) {
                                     cb( runWithNode, registry[ selector ] );
-                                }      
+                                }
                             }
                         }
                     };
@@ -64,6 +64,7 @@ class DOMSubscriber {
                     }
                 }
             });
+            root.observer.subscriptions = subscriptions;
             root.observer.observe(root, { childList: true, subtree: true });
         }
 
